@@ -10,6 +10,8 @@ use yii\web\Controller;
 use yii\web\NotFoundHttpException;
 use yii\filters\VerbFilter;
 use yii\helpers\ArrayHelper;
+use conquer\select2\Select2Action;
+
 
 
 /**
@@ -34,6 +36,8 @@ class CarUserJunctionController extends Controller
             ]
         );
     }
+
+
 
 
     public function actionIndex()
@@ -87,7 +91,6 @@ class CarUserJunctionController extends Controller
     public function actionDelete($id)
     {
         $this->findModel($id)->delete();
-
         return $this->redirect(['index']);
     }
 
@@ -97,7 +100,6 @@ class CarUserJunctionController extends Controller
         if (($model = CarUserJunction::findOne(['id' => $id])) !== null) {
             return $model;
         }
-
         throw new NotFoundHttpException('The requested page does not exist.');
     }
 }

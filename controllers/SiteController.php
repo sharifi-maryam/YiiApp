@@ -10,6 +10,9 @@ use yii\filters\VerbFilter;
 use app\models\LoginForm;
 use app\models\ContactForm;
 use app\models\CarUserJunction;
+use app\controllers\ActiveQuery;
+
+
 
 class SiteController extends Controller
 {
@@ -52,6 +55,8 @@ class SiteController extends Controller
                 'class' => 'yii\captcha\CaptchaAction',
                 'fixedVerifyCode' => YII_ENV_TEST ? 'testme' : null,
             ],
+
+
         ];
     }
 
