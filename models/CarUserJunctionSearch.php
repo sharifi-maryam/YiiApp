@@ -11,50 +11,29 @@ use app\models\CarUserJunction;
  */
 class CarUserJunctionSearch extends CarUserJunction
 {
-    /**
-     * {@inheritdoc}
-     */
+
+    public $username;
+    public $car_name;
+
     public function rules()
     {
         return [
-            [['id', 'car_id', 'user_id'], 'integer'],
+            [['car_name', 'username'], 'safe'],
         ];
     }
 
-    /**
-     * {@inheritdoc}
-     */
-    public function scenarios()
-    {
-        // bypass scenarios() implementation in the parent class
-        return Model::scenarios();
-    }
-
-
     public function search($params)
     {
-        $query = CarUserJunction::find();
-
-        // add conditions that should always apply here
-
+        $query = CarUserJunction::find()
+            ->innerJoin('car', 'car.id = car_user_junction.car_id')
+            ->innerJoin('user', 'user.id = car_user_junction.user_id');
         $dataProvider = new ActiveDataProvider([
             'query' => $query,
         ]);
-
         $this->load($params);
 
-        if (!$this->validate()) {
-            // uncomment the following line if you do not want to return any records when validation fails
-            // $query->where('0=1');
-            return $dataProvider;
-        }
-
-        // grid filtering conditions
-        $query->andFilterWhere([
-            'id' => $this->id,
-            'car_id' => $this->car_id,
-            'user_id' => $this->user_id,
-        ]);
+        $query->andFilterWhere(['like', 'car.name', $this->car_name]);
+        $query->andFilterWhere(['like', 'user.username', $this->username]);
 
         return $dataProvider;
     }

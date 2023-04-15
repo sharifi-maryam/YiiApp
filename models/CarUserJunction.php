@@ -42,20 +42,12 @@ class CarUserJunction extends \yii\db\ActiveRecord
 
     public function getCar()
     {
-        $car = Car::find()
-            ->where(['id' => 'car_id'])
-            ->one();
-
-        return $car;
+        return $this->hasOne(Car::class, ['id' => 'car_id']);
     }
 
 
     public function getUser()
     {
-        $user = User::find()
-            ->where(['id' => 'user_id'])
-            ->one();
-
-        return $user;
+        return $this->hasOne(User::class, ['id' => 'user_id']);
     }
 }

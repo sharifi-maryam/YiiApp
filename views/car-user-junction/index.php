@@ -6,9 +6,7 @@ use yii\helpers\Url;
 use yii\grid\ActionColumn;
 use yii\grid\GridView;
 
-/** @var yii\web\View $this */
-/** @var app\models\CarUserJunctionSearch $searchModel */
-/** @var yii\data\ActiveDataProvider $dataProvider */
+
 
 $this->title = 'Car User Junctions';
 $this->params['breadcrumbs'][] = $this->title;
@@ -29,9 +27,20 @@ $this->params['breadcrumbs'][] = $this->title;
         'filterModel' => $searchModel,
         'columns' => [
             ['class' => 'yii\grid\SerialColumn'],
-
-            'car_id',
-            'user_id',
+            [
+                'attribute' => 'car_name',
+                'value' => function ($junc) {
+                    return $junc->car->name ?? '---';
+                },
+                'label' => 'نام ماشین'
+            ],
+            [
+                'attribute' => 'username',
+                'value' => function ($junc) {
+                    return $junc->user->username ?? '---';
+                },
+                'label' => 'نام کاربر'
+            ],
             [
                 'class' => ActionColumn::className(),
                 'urlCreator' => function ($action, CarUserJunction $model, $key, $index, $column) {
