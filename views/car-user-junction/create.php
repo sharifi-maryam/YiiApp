@@ -42,12 +42,11 @@ $this->params['breadcrumbs'][] = $this->title;
         'id' => 'select_user',
         'language' => 'en',
         'size' => 'l',
-        'data' => ArrayHelper::toArray($users),
         'options' => ['placeholder' => 'select user...'],
         'pluginOptions' => [
             'allowClear' => true,
             'disabled' => true
-        ],
+        ]
     ]);
     ?>
 
@@ -68,9 +67,33 @@ $this->params['breadcrumbs'][] = $this->title;
 $this->registerJs(
     <<<JS
     $('#caruserjunction-car_id').on('change', function(e) {
-        console.log($('#caruserjunction-car_id').val());
+
+        var CarID = $('#caruserjunction-car_id').val();
+
+        console.log(CarID);
+        if(CarID){
+            let data = jQuery.param({
+                selectedCarId: CarID
+            });
+            
+            $.ajax('/car-user-junction/list' ,{
+                type:'POST',
+                data: data,
+                dataType : "json",
+                success:function(data){
+                    $('#caruserjunction-user_id').html(data);
+                    $('#caruserjunction-user_id').prop('disabled', false);
+                    console.log(data);
+                }
+            }); 
+        }
+        
+        else{
+            $('#caruserjunction-user_id').html('<option value="">Select</option>'); 
+        }
+
+
     });
-    console.log("salam");    
 JS
 );
 

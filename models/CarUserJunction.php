@@ -3,6 +3,7 @@
 namespace app\models;
 
 use Yii;
+use yii\data\ActiveDataProvider;
 
 
 class CarUserJunction extends \yii\db\ActiveRecord

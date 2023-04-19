@@ -13,6 +13,8 @@ use yii\filters\VerbFilter;
 use Yii;
 use yii\helpers\ArrayHelper;
 use conquer\select2\Select2Action;
+use app\controllers\Json;
+use yii\web\Response;
 
 
 
@@ -70,7 +72,6 @@ class CarUserJunctionController extends Controller
     {
         $model = new CarUserJunction();
         $caritems = ArrayHelper::map(Car::find()->all(), 'id', 'name');
-        $users = ArrayHelper::map(User::find()->all(), 'id', 'username');
 
         if ($this->request->isPost) {
             if ($model->load($this->request->post()) && $model->save()) {
@@ -81,13 +82,47 @@ class CarUserJunctionController extends Controller
         }
 
         return $this->render('create', [
-            'model' => $model, 'items' => $caritems, 'users' => $users
+            'model' => $model, 'items' => $caritems
         ]);
     }
 
 
 
 
+
+
+
+    public function actionList()
+    {
+        if (Yii::$app->request->isPost) {
+            Yii::$app->response->format = Response::FORMAT_JSON;
+            $selectedCarId = Yii::$app->request->post()['selectedCarId'];
+
+            $count = CarUserJunction::find()
+                ->innerJoin('user', 'user.id = car_user_junction.user_id')
+                ->where(['car_id' => $selectedCarId])
+                ->count();
+
+
+            $query = CarUserJunction::find()
+                ->innerJoin('user', 'user.id = car_user_junction.user_id')
+                ->where(['car_id' => $selectedCarId])
+                ->all();
+
+            $arrayuser = ArrayHelper::toArray(ArrayHelper::map($query, 'user.id', 'user.username'));
+        }
+
+
+        // $html = '';
+        // if ($count > 0) {
+        //     foreach ($arrayuser as $user)
+        //         $html . "<option value='" . $arrayuser->id . "'>" . $arrayuser->username . "</option>";
+        // } else
+        //     echo "<option>-</option>";
+
+
+        return $arrayuser;
+    }
 
 
     public function actionDelete($id)
@@ -104,41 +139,4 @@ class CarUserJunctionController extends Controller
         }
         throw new NotFoundHttpException('The requested page does not exist.');
     }
-
-
-
-
-
-
-    // public function actionList($id)
-    // {
-
-
-    //     $count = CarUserJunction::find()
-    //         ->innerJoin('car', 'car.id = car_user_junction.car_id')
-    //         ->innerJoin('user', 'user.id = car_user_junction.user_id')
-    //         ->where(['car.id' => $id])
-    //         ->count();
-
-
-    //     $users = CarUserJunction::find()
-    //         ->innerJoin('car', 'car.id = car_user_junction.car_id')
-    //         ->innerJoin('user', 'user.id = car_user_junction.user_id')
-    //         ->where(['car.id' => $id])
-    //         ->$this->asJson(${[]})
-    //         ->all();
-
-    //     dd($count);
-
-
-
-
-    //     if ($count > 0) {
-    //         foreach ($users as $p) {
-    //             echo "<option value='" . $users->user_id . "'>" . $users->username . "</option>";
-    //         }
-    //     } else {
-    //         echo "<option>-</option>";
-    //     }
-    // }
 }
