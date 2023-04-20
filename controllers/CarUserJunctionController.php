@@ -106,10 +106,15 @@ class CarUserJunctionController extends Controller
 
             $query = CarUserJunction::find()
                 ->innerJoin('user', 'user.id = car_user_junction.user_id')
-                ->where(['car_id' => $selectedCarId])
-                ->all();
+                ->where(['car_id' => $selectedCarId]);
 
-            $arrayuser = ArrayHelper::toArray(ArrayHelper::map($query, 'user.id', 'user.username'));
+
+            $notSelectedQuery = (new \yii\db\Query())
+                ->select(['id', 'username'])
+                ->from('user')
+                ->where(['not exist', $query]);
+
+            $arrayuser = ArrayHelper::toArray(ArrayHelper::map($notSelectedQuery, 'user.id', 'user.username'));
         }
 
 
@@ -121,8 +126,12 @@ class CarUserJunctionController extends Controller
         //     echo "<option>-</option>";
 
 
-        return $arrayuser;
+        return json_encode($arrayuser);
     }
+
+
+
+
 
 
     public function actionDelete($id)

@@ -39,7 +39,6 @@ $this->params['breadcrumbs'][] = $this->title;
 
     <?php
     echo $form->field($model, 'user_id')->widget(Select2::classname(), [
-        'id' => 'select_user',
         'language' => 'en',
         'size' => 'l',
         'options' => ['placeholder' => 'select user...'],
@@ -81,9 +80,48 @@ $this->registerJs(
                 data: data,
                 dataType : "json",
                 success:function(data){
-                    $('#caruserjunction-user_id').html(data);
-                    $('#caruserjunction-user_id').prop('disabled', false);
+
+
+                    console.log(typeof data);
                     console.log(data);
+                    $('#caruserjunction-user_id').empty();
+                    $('#caruserjunction-user_id').prop('disabled', false);
+
+
+                    // var keys = Object.keys(data);
+                    // var resultArr = keys.map(function(key){
+                    //     return data[key];
+                    // });
+
+                    // console.log( resultArr);
+                    
+
+                    // $.each(data, function(index, value){
+                    //     $('#caruserjunction-user_id').append('<option value="' + value.value + '">' + value.text + '</option>');
+                    // });
+
+                    // var arr = $.map(data, function(value, index){
+                    //     return [value];
+                    // });
+                    //$('#caruserjunction-user_id').prop('data', data);
+
+                    
+                    // $(data).each(function(){
+                    //     console.log(typeof data);
+                    // });
+
+                    // //$('#caruserjunction-user_id').val("a");
+
+
+                    //     // var option = $("<option />");
+                    //     // option.attr("value", data);
+                    //     // $('#caruserjunction-user_id').append(option);
+                    // })
+                    //$('#caruserjunction-user_id').prop('option',);
+
+
+                    //$('#caruserjunction-user_id').val(arr);
+                    
                 }
             }); 
         }
