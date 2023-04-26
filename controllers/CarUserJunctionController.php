@@ -56,6 +56,8 @@ class CarUserJunctionController extends Controller
     }
 
 
+
+
     public function actionView($id)
     {
         return $this->render('view', [
@@ -73,8 +75,11 @@ class CarUserJunctionController extends Controller
         $model = new CarUserJunction();
         $caritems = ArrayHelper::map(Car::find()->all(), 'id', 'name');
 
-        if ($this->request->isPost) {
-            if ($model->load($this->request->post()) && $model->save()) {
+
+        if (Yii::$app->request->post()) {
+
+            if ($model->load(Yii::$app->request->post()) && $model->save()) {
+
                 return $this->redirect(['view', 'id' => $model->id]);
             }
         } else {
@@ -96,37 +101,20 @@ class CarUserJunctionController extends Controller
     {
         if (Yii::$app->request->isPost) {
             Yii::$app->response->format = Response::FORMAT_JSON;
+
+
             $selectedCarId = Yii::$app->request->post()['selectedCarId'];
 
-            $count = CarUserJunction::find()
-                ->innerJoin('user', 'user.id = car_user_junction.user_id')
-                ->where(['car_id' => $selectedCarId])
-                ->count();
 
-
-            $query = CarUserJunction::find()
-                ->innerJoin('user', 'user.id = car_user_junction.user_id')
-                ->where(['car_id' => $selectedCarId]);
-
-
-            $notSelectedQuery = (new \yii\db\Query())
-                ->select(['id', 'username'])
+            $query = (new \yii\db\Query())
+                ->select(['user.id', 'user.username'])
                 ->from('user')
-                ->where(['not exist', $query]);
+                ->leftJoin('car_user_junction', 'user.id = car_user_junction.user_id')
+                ->where(['<>', 'car_user_junction.car_id', $selectedCarId])
+                ->all();
 
-            $arrayuser = ArrayHelper::toArray(ArrayHelper::map($notSelectedQuery, 'user.id', 'user.username'));
+            return ArrayHelper::toArray(ArrayHelper::map($query, 'id', 'username'));
         }
-
-
-        // $html = '';
-        // if ($count > 0) {
-        //     foreach ($arrayuser as $user)
-        //         $html . "<option value='" . $arrayuser->id . "'>" . $arrayuser->username . "</option>";
-        // } else
-        //     echo "<option>-</option>";
-
-
-        return json_encode($arrayuser);
     }
 
 
@@ -139,6 +127,9 @@ class CarUserJunctionController extends Controller
         $this->findModel($id)->delete();
         return $this->redirect(['index']);
     }
+
+
+
 
 
     protected function findModel($id)

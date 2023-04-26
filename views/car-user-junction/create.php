@@ -4,8 +4,6 @@ use yii\helpers\Html;
 use yii\widgets\ActiveForm;
 use kartik\select2\Select2;
 use yii\helpers\ArrayHelper;
-use app\models\Car;
-use yii\web\View;
 
 
 
@@ -47,13 +45,16 @@ $this->params['breadcrumbs'][] = $this->title;
             'disabled' => true
         ]
     ]);
+
+    echo Html::submitButton('Save', ['class' => 'btn btn-success']);
+
     ?>
 
     <?php
     ActiveForm::end();
     ?>
 
-    <?= Html::submitButton('Save', ['class' => 'btn btn-success']) ?>
+
 </div>
 
 
@@ -74,7 +75,7 @@ $this->registerJs(
             let data = jQuery.param({
                 selectedCarId: CarID
             });
-            
+
             $.ajax('/car-user-junction/list' ,{
                 type:'POST',
                 data: data,
@@ -82,50 +83,21 @@ $this->registerJs(
                 success:function(data){
 
 
-                    console.log(typeof data);
+
                     console.log(data);
+
                     $('#caruserjunction-user_id').empty();
                     $('#caruserjunction-user_id').prop('disabled', false);
 
 
-                    // var keys = Object.keys(data);
-                    // var resultArr = keys.map(function(key){
-                    //     return data[key];
-                    // });
+                    $.each(data, function(index, value){
+                        $('#caruserjunction-user_id').append('<option value="' + index + '">' + value + '</option>');
+                    });
 
-                    // console.log( resultArr);
-                    
-
-                    // $.each(data, function(index, value){
-                    //     $('#caruserjunction-user_id').append('<option value="' + value.value + '">' + value.text + '</option>');
-                    // });
-
-                    // var arr = $.map(data, function(value, index){
-                    //     return [value];
-                    // });
-                    //$('#caruserjunction-user_id').prop('data', data);
-
-                    
-                    // $(data).each(function(){
-                    //     console.log(typeof data);
-                    // });
-
-                    // //$('#caruserjunction-user_id').val("a");
-
-
-                    //     // var option = $("<option />");
-                    //     // option.attr("value", data);
-                    //     // $('#caruserjunction-user_id').append(option);
-                    // })
-                    //$('#caruserjunction-user_id').prop('option',);
-
-
-                    //$('#caruserjunction-user_id').val(arr);
-                    
                 }
             }); 
         }
-        
+
         else{
             $('#caruserjunction-user_id').html('<option value="">Select</option>'); 
         }

@@ -24,16 +24,8 @@ class CarController extends Controller
     }
 
 
-    // public function accessRules()
-    // {
-    //     return array(
-    //         array(
-    //             'deny',
-    //             'actions' => array('index'),
-    //             'users' => array('*'),
-    //         ),
-    //     );
-    // }
+
+
 
 
     public function behaviors()
@@ -51,11 +43,10 @@ class CarController extends Controller
         );
     }
 
-    /**
-     * Lists all Car models.
-     *
-     * @return string
-     */
+
+
+
+
     public function actionIndex()
     {
 
@@ -68,18 +59,19 @@ class CarController extends Controller
         ]);
     }
 
-    /**
-     * Displays a single Car model.
-     * @param int $id ID
-     * @return string
-     * @throws NotFoundHttpException if the model cannot be found
-     */
+
+
+
+
     public function actionView($id)
     {
         return $this->render('view', [
             'model' => $this->findModel($id),
         ]);
     }
+
+
+
 
 
     public function actionCreate()
@@ -99,13 +91,12 @@ class CarController extends Controller
         ]);
     }
 
-    /**
-     * Deletes an existing Car model.
-     * If deletion is successful, the browser will be redirected to the 'index' page.
-     * @param int $id ID
-     * @return \yii\web\Response
-     * @throws NotFoundHttpException if the model cannot be found
-     */
+
+
+
+
+
+
     public function actionDelete($id)
     {
         $this->findModel($id)->delete();
@@ -113,13 +104,13 @@ class CarController extends Controller
         return $this->redirect(['index']);
     }
 
-    /**
-     * Finds the Car model based on its primary key value.
-     * If the model is not found, a 404 HTTP exception will be thrown.
-     * @param int $id ID
-     * @return Car the loaded model
-     * @throws NotFoundHttpException if the model cannot be found
-     */
+
+
+
+
+
+
+
     protected function findModel($id)
     {
         if (($model = Car::findOne(['id' => $id])) !== null) {
